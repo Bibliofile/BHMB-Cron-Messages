@@ -1,0 +1,25 @@
+<template id="biblio_cron_messages_template">
+    <div class="column is-one-third-desktop is-half-tablet">
+        <div class="box">
+            <label>
+                Minute Value:
+                <input class="input" pattern="[0-9\, ]{1,}" placeholder="0-59">
+            </label>
+            <br>
+            <label>
+                Message:
+                <input class="m input">
+            </label>
+            <br>
+            <a>Delete</a>
+        </div>
+    </div>
+</template>
+<div class="container is-fluid">
+    <section class="section is-small">
+        <span class="button is-primary is-pulled-right">+</span>
+        <h3>These are sent on a regular schedule.</h3>
+        <span>If minute value is set to 0, the message will be sent at 1:00, 2:00... if it is set to 0,30, it will be sent at 1:00, 1:30, 2:00...</span>
+    </section>
+    <div id="cMsgs" class="columns is-multiline"></div>
+</div>

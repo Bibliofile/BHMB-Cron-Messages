@@ -21,8 +21,8 @@ var biblio_cron_messages = MessageBotExtension('biblio_cron_messages');
         ex.running = false;
     };
 
-    var tab = ex.tab = ui.addTab('Cron Messages', 'messages');
-    tab.innerHTML = '<style>#biblio_cron_messages_h { margin: 0 0 5px 0;} #cMsgs{padding-top: 8px;margin-top: 8px;border-top: 1px solid;height: calc(100vh - 185px);}</style><template id="biblio_cron_messages_template"><div class="third-box"><label>Minute Value</label><input value="0" pattern="[0-9\, ]{1,}" placeholder="0-59"><br><label>Message: </label><input class="m"><br><a>Delete</a></div></template><h3 id="biblio_cron_messages_h">These are sent on a regular schedule.</h3><span class="descdet">If minute value is set to 0, the message will be sent at 1:00, 2:00... if it is set to 0,30, it will be sent at 1:00, 1:30, 2:00....</span><span class="top-right-button">+</span><div id="cMsgs"></div>';
+    var tab = ex.tab = ui.addTab('Cron', 'messages');
+    tab.innerHTML = '<template id="biblio_cron_messages_template"> <div class="column is-one-third-desktop is-half-tablet"> <div class="box"> <label> Minute Value: <input class="input" pattern="[0-9\,]{1,}" placeholder="0-59"> </label> <br><label> Message: <input class="m input"> </label> <br><a>Delete</a> </div></div></template><div class="container is-fluid"> <section class="section is-small"> <span class="button is-primary is-pulled-right">+</span> <h3>These are sent on a regular schedule.</h3> <span>If minute value is set to 0, the message will be sent at 1:00, 2:00... if it is set to 0,30, it will be sent at 1:00, 1:30, 2:00...</span> </section> <div id="cMsgs" class="columns is-multiline"></div></div>';
 
     function addMessage(values) {
         ui.buildContentFromTemplate('#biblio_cron_messages_template', '#cMsgs',
@@ -48,7 +48,7 @@ var biblio_cron_messages = MessageBotExtension('biblio_cron_messages');
         }
     })
 
-    tab.querySelector('.top-right-button').addEventListener('click', function() {
+    tab.querySelector('.button').addEventListener('click', function() {
         addMessage({});
     });
 

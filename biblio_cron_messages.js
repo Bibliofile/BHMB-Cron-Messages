@@ -38,7 +38,7 @@ var biblio_cron_messages = MessageBotExtension('biblio_cron_messages');
         if (event.target.tagName == 'A') {
             ui.alert('Really delete this message?',
             [
-                {text: 'Delete', style: 'danger', thisArg: event.target.parentElement, action: function() {
+                {text: 'Delete', style: 'is-danger', thisArg: event.target.parentElement, action: function() {
                     this.remove();
                     saveConfig();
                 }},
@@ -53,7 +53,7 @@ var biblio_cron_messages = MessageBotExtension('biblio_cron_messages');
     });
 
     function saveConfig() {
-        var containers = Array.from(tab.querySelector('#cMsgs > div'));
+        var containers = Array.from(tab.querySelectorAll('#cMsgs > div'));
         ex.messages = [];
         containers.forEach(function(container) {
             var minutes = container.querySelector('input');

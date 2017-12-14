@@ -10,6 +10,12 @@ interface Message {
   message: string
 }
 
+function findParent(className: string, element: HTMLElement | null): HTMLElement {
+  while (element && !element.classList.contains(className)) element = element.parentElement
+  if (element) return element
+  throw new Error('No root member found.')
+}
+
 MessageBot.registerExtension('bibliofile/cron', (ex) => {
   const getMessages = () => ex.storage.get<Message[]>('messages', [])
 
@@ -38,13 +44,13 @@ MessageBot.registerExtension('bibliofile/cron', (ex) => {
   let tab = ui.addTab('Cron', 'messages')
   tab.innerHTML = html
 
-  let columns = tab.querySelector('.columns') as HTMLElement
+  let container = tab.querySelector('.messages-container') as HTMLElement
 
   function saveConfig() {
-    let containers = Array.from(columns.children)
+    let boxes = Array.from(container.children)
     let messages: Message[] = []
-    containers.forEach(function (container) {
-      let minutes = container.querySelector('input') as HTMLInputElement
+    boxes.forEach(function (container) {
+      let minutes = container.querySelector('input')!
       let message = container.querySelector('.m') as HTMLInputElement
       if (minutes.validity.valid && minutes.value.length && message.value.length) {
         messages.push({ message: message.value, minutes: minutes.value })
@@ -55,15 +61,16 @@ MessageBot.registerExtension('bibliofile/cron', (ex) => {
   }
   tab.addEventListener('input', saveConfig)
 
-  columns.addEventListener('click', function (event) {
+  container.addEventListener('click', function (event) {
     const target = event.target as HTMLElement
-    if (target.tagName == 'A') {
+    if (target.tagName == 'BUTTON') {
+      target.parentElement
       ui.alert('Really delete this message?', [
         { text: 'Delete', style: 'is-danger' },
         { text: 'Cancel' }
       ], function (response) {
         if (response == 'Delete') {
-          (target.parentElement as HTMLElement).remove()
+          findParent('box', target).remove()
           saveConfig()
         }
       })
@@ -71,13 +78,13 @@ MessageBot.registerExtension('bibliofile/cron', (ex) => {
     }
   })
 
-  ;(tab.querySelector('.button') as HTMLButtonElement).addEventListener('click', function () {
+  tab.querySelector('.button')!.addEventListener('click', function () {
     addMessage()
   })
 
-  let template = tab.querySelector('template') as HTMLTemplateElement
+  let template = tab.querySelector('template')!
   let addMessage = (msg: Partial<Message> = {}) => {
-    ui.buildTemplate(template, columns, [
+    ui.buildTemplate(template, container, [
       { selector: 'input', value: msg.minutes || 0 },
       { selector: '.m', value: msg.message || '' },
     ])
